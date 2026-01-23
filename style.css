@@ -37,7 +37,9 @@ body {
     height: 20px;
     background-color: #2ecc71;
     position: absolute;
-    border-radius: 5px;
+    border-radius: 10px;       /* Rundere hjørner */
+    border-bottom: 5px solid #27ae60; /* En mørkere grønn kant nederst for 3D-effekt */
+}
     /* Behold de andre tingene hvis de står der, som width og bottom */
 }
 
