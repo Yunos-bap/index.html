@@ -38,6 +38,7 @@ body {
     background-color: #2ecc71;
     position: absolute;
     border-radius: 5px;
+    /* Behold de andre tingene hvis de står der, som width og bottom */
 }
 
 /* Styling for knappene på iPad */
