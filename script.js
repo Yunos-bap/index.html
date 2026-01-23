@@ -3,7 +3,7 @@ const leftBtn = document.getElementById('leftBtn');
 const rightBtn = document.getElementById('rightBtn');
 const jumpBtn = document.getElementById('jumpBtn');
 
-// Spill-innstillinger
+// Spillerens innstillinger
 let pX = 50;         
 let pY = 0;          
 let vX = 0;          
@@ -14,17 +14,19 @@ const gravity = 0.8;
 const jumpPower = -15; 
 const speed = 6;       
 
+// PLATTFORM-INNSTILLINGER (Må være like som i HTML/CSS)
+// I din index.html står det: left: 100px, bottom: 80px, width: 150px
+const platX = 100;
+const platY = -80;  // Vi bruker minus fordi pY går nedover fra bakken
+const platWidth = 150;
+
 function update() {
-    // 1. Tyngdekraft og bevegelse
+    // 1. Bevegelse og tyngdekraft
     vY += gravity;
     pY += vY;
     pX += vX;
 
-    // 2. Hindre spilleren i å gå utenfor venstre/høyre vegg
-    if (pX < 0) pX = 0;
-    if (pX > 570) pX = 570; // 600px bredde minus spillerens 30px
-
-    // 3. Bakke-kollisjon (pY = 0 er bunnen av containeren)
+    // 2. Bakke-kollisjon
     if (pY >= 0) {
         pY = 0;
         vY = 0;
@@ -33,33 +35,34 @@ function update() {
         isGrounded = false;
     }
 
-    // 4. Plattform-kollisjon (Den grønne boksen)
-    // Plattformen er 150px bred (fra 200 til 350)
-    // Den ligger 100px fra bunnen.
-    if (pX + 30 > 200 && pX < 350) {
-        // Sjekker om spillerens føtter er i høyde med plattformen (-100px)
-        // og at vi er på vei nedover (vY > 0)
-        if (pY + 30 >= -100 && pY + 30 <= -80 && vY > 0) {
-            pY = -130; // 100px (høyde) + 30px (spiller høyde)
+    // 3. Plattform-kollisjon (Den grønne streken)
+    // Sjekker om spilleren er innenfor plattformens bredde
+    if (pX + 30 > platX && pX < platX + platWidth) {
+        // Sjekker om føttene treffer toppen av plattformen mens vi faller
+        if (pY + 30 >= platY && pY + 30 <= platY + 20 && vY > 0) {
+            pY = platY - 30; // Plasserer spilleren nøyaktig oppå
             vY = 0;
             isGrounded = true;
         }
     }
 
-    // 5. Oppdater posisjon på skjermen
+    // 4. Vegg-kollisjon (Hindre å gå ut av skjermen)
+    if (pX < 0) pX = 0;
+    if (pX > 570) pX = 570; 
+
+    // 5. Oppdater grafikk
     player.style.transform = `translate(${pX}px, ${pY}px)`;
 
     requestAnimationFrame(update);
 }
 
-// --- KONTROLLER ---
-
-// Tastatur
+// KONTROLLER (Tastatur og Touch)
 window.onkeydown = (e) => {
     if (e.key === "ArrowRight") vX = speed;
     if (e.key === "ArrowLeft") vX = -speed;
-    if ((e.key === " " || e.key === "ArrowUp" || e.key === "w") && isGrounded) {
+    if ((e.key === " " || e.key === "ArrowUp") && isGrounded) {
         vY = jumpPower;
+        isGrounded = false;
     }
 };
 
@@ -67,18 +70,13 @@ window.onkeyup = (e) => {
     if (e.key === "ArrowRight" || e.key === "ArrowLeft") vX = 0;
 };
 
-// iPad Touch (Lagt til 'passive: false' for bedre respons)
 leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); vX = -speed; }, {passive: false});
-leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); vX = 0; }, {passive: false});
-
+leftBtn.addEventListener('touchend', () => vX = 0);
 rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); vX = speed; }, {passive: false});
-rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); vX = 0; }, {passive: false});
-
-jumpBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    if (isGrounded) {
-        vY = jumpPower;
-    }
+rightBtn.addEventListener('touchend', () => vX = 0);
+jumpBtn.addEventListener('touchstart', (e) => { 
+    e.preventDefault(); 
+    if (isGrounded) { vY = jumpPower; isGrounded = false; } 
 }, {passive: false});
 
 update();
