@@ -17,7 +17,7 @@ const speed = 6;
 // PLATTFORM-INNSTILLINGER (Må være like som i HTML/CSS)
 // I din index.html står det: left: 100px, bottom: 80px, width: 150px
 const platX = 100;
-const platY = -80;  // Vi bruker minus fordi pY går nedover fra bakken
+const platY = -50;  // Vi bruker minus fordi pY går nedover fra bakken
 const platWidth = 150;
 
 function update() {
