@@ -79,4 +79,7 @@ jumpBtn.addEventListener('touchstart', (e) => {
     if (isGrounded) { vY = jumpPower; isGrounded = false; } 
 }, {passive: false});
 
+
 update();
+
+
