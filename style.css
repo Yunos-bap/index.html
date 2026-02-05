@@ -35,10 +35,18 @@ body {
 /* Plattformene */
 .platform {
     height: 20px;
-    background-color: #2ecc71;
     position: absolute;
-    border-radius: 10px;
-    border-bottom: 5px solid #27ae60;
+    /* Dette henter bildet du lastet opp */
+    background-image: url('platform.png');
+    /* Vi setter hver rute til 20x20px så den matcher kollisjonen din */
+    background-size: 20px 20px;
+    /* Dette er "magien" som gjentar bildet bortover */
+    background-repeat: repeat-x;
+    /* Gjør at pikslene holder seg skarpe på iPad */
+    image-rendering: pixelated;
+    /* Fjerner de gamle fargene og kantene */
+    background-color: transparent;
+    border: none;
 }
 
 /* Styling for knappene på iPad */
